@@ -25,9 +25,12 @@
 
         <div class="row " style="margin-bottom: 50px;">
             <div class="col align-self-center">
-                <form method="get">
+                <form method="post">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Tarea">
+
+                        {{ formularioTarea.hidden_tag() }}
+
+                        {{ formularioTarea.titulo }}
 
                         <select class="form-select" aria-label="Default select example">
                             <option selected>Elige la categoria</option>
@@ -36,9 +39,10 @@
                             <option value="3">Three</option>
                         </select>
 
-                        <input type="date" class="form-control">
+                        {{ formularioTarea.fecha }}
 
-                        <a href="#" class="btn btn-primary">Registrado</a>
+
+                        {{ formularioTarea.boton }}
                     </div>
                 </form>
             </div>
