@@ -32,12 +32,7 @@
 
                         {{ formularioTarea.titulo }}
 
-                        <select class="form-select" aria-label="Default select example">
-                            <option selected>Elige la categoria</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
+                        {{ formularioTarea.categoria }}
 
                         {{ formularioTarea.fecha }}
 
@@ -62,35 +57,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="table-success">
-                                <td>Terminar vistas 1</td>
-                                <td>10/11/2024</td>
-                                <td>Trabajo</td>
-                                <td>No finalizado</td>
-                                <td>
-                                    <a href="#" class="btn btn-primary btn-sm">Terminado</a>
-                                </td>
-                            </tr>
-
-                            <tr class="table-danger">
-                                <td>Terminar vistas 1</td>
-                                <td>10/11/2024</td>
-                                <td>Trabajo</td>
-                                <td>No finalizado</td>
-                                <td>
-                                    <a href="#" class="btn btn-primary btn-sm">Terminado</a>
-                                </td>
-                            </tr>
-
-                            <tr class="table-warning">
-                                <td>Terminar vistas 1</td>
-                                <td>10/11/2024</td>
-                                <td>Trabajo</td>
-                                <td>No finalizado</td>
-                                <td>
-                                    <a href="#" class="btn btn-primary btn-sm">Terminado</a>
-                                </td>
-                            </tr>
+                            {% for tarea in todas %}
+                                {% if tarea.idestado == 1 %}
+                                    <tr class="table-success">
+                                {% elif tarea.idestado == 2 %}
+                                    <tr class="table-danger">  
+                                {% elif tarea.idestado == 3 %} 
+                                    <tr class="table-warning"> 
+                                {% endif %}
+                                        <td>{{ tarea.titulo }}</td>
+                                        <td>{{ tarea.fecha }}</td>
+                                        <td>{{ tarea.categoria.nombre }}</td>
+                                        <td>{{ tarea.estado.estado }}</td>
+                                        <td>
+                                            <a href="#" class="btn btn-primary btn-sm">Terminado</a>
+                                        </td>
+                                    </tr>
+                            {% endfor %}
 
                         </tbody>
                     </table>

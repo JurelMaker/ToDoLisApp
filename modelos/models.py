@@ -8,13 +8,13 @@ class Categorias(db.Model):
     __tablename__='Cat_categorias'
     id_categorias = db.Column(db.Integer,primary_key=True)
     nombre = db.Column(db.Text)
-    tarea = db.relationship('Tareas',backref='tarea',lazy='dynamic')
+    tarea = db.relationship('Tarea',backref='categoria',lazy='dynamic')
 
 class Estado(db.Model):
     __tablename__='Cat_estado'
     id_estado = db.Column(db.Integer,primary_key=True)
     estado = db.Column(db.Text)
-    tarea = db.relationship('Tareas',backref='tarea',lazy='dynamic')
+    tarea = db.relationship('Tarea',backref='estado',lazy='dynamic')
 
 class Tarea(db.Model):
     __tablename__='Tareas'
@@ -23,3 +23,10 @@ class Tarea(db.Model):
     fecha = db.Column(db.Date)
     idcategoria = db.Column(db.Integer,db.ForeignKey('Cat_categorias.id_categorias'),name='fk_categorias_tarea')
     idestado = db.Column(db.Integer,db.ForeignKey('Cat_estado.id_estado'),name='fk_estado_tarea')
+
+
+    def __init__(self,titulo,fecha,idcategoria,idestado):
+        self.titulo = titulo
+        self.fecha = fecha
+        self.idcategoria = idcategoria
+        self.idestado = idestado
