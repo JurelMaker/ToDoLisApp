@@ -61,16 +61,21 @@
                                 {% if tarea.idestado == 1 %}
                                     <tr class="table-success">
                                 {% elif tarea.idestado == 2 %}
-                                    <tr class="table-danger">  
-                                {% elif tarea.idestado == 3 %} 
-                                    <tr class="table-warning"> 
+                                    <tr class="table-secondary">  
+                                {% elif tarea.idestado == 3  %}
+                                    <tr class="table-warning">
+                                {% elif tarea.idestado == 4 %} 
+                                    <tr class="table-danger"> 
                                 {% endif %}
                                         <td>{{ tarea.titulo }}</td>
                                         <td>{{ tarea.fecha }}</td>
                                         <td>{{ tarea.categoria.nombre }}</td>
                                         <td>{{ tarea.estado.estado }}</td>
                                         <td>
-                                            <a href="#" class="btn btn-primary btn-sm">Terminado</a>
+                                            <form method="post" action="/terminado">
+                                                <button class="btn btn-primary btn-sm" type="submit" value="{{ tarea.id }}" 
+                                                name="id">Finalizar</button>
+                                            </form>
                                         </td>
                                     </tr>
                             {% endfor %}
@@ -78,7 +83,6 @@
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
 
