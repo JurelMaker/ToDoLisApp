@@ -45,6 +45,7 @@
 
         <div class="row">
             <div class="col align-self-center">
+                <h1 class="text-center">Tareas pendientes</h1>
                 <div class="table-responsive">
                     <table class="table table-hover text-center">
                         <thead>
@@ -57,23 +58,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for tarea in todas %}
-                                {% if tarea.idestado == 1 %}
-                                    <tr class="table-success">
-                                {% elif tarea.idestado == 2 %}
+                            {% for pendiente in pendientes %}
+                                {% if pendiente.idestado == 2 %}
                                     <tr class="table-secondary">  
-                                {% elif tarea.idestado == 3  %}
+                                {% elif pendiente.idestado == 3  %}
                                     <tr class="table-warning">
-                                {% elif tarea.idestado == 4 %} 
-                                    <tr class="table-danger"> 
                                 {% endif %}
-                                        <td>{{ tarea.titulo }}</td>
-                                        <td>{{ tarea.fecha }}</td>
-                                        <td>{{ tarea.categoria.nombre }}</td>
-                                        <td>{{ tarea.estado.estado }}</td>
+                                        <td>{{ pendiente.titulo }}</td>
+                                        <td>{{ pendiente.fecha }}</td>
+                                        <td>{{ pendiente.categoria.nombre }}</td>
+                                        <td>{{ pendiente.estado.estado }}</td>
                                         <td>
                                             <form method="post" action="/terminado">
-                                                <button class="btn btn-primary btn-sm" type="submit" value="{{ tarea.id }}" 
+                                                <button class="btn btn-primary btn-sm" type="submit" value="{{ pendiente.id }}" 
                                                 name="id">Finalizar</button>
                                             </form>
                                         </td>
@@ -84,6 +81,77 @@
                     </table>
                 </div>
             </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col align-self-center">
+                <h1 class="text-center">Tareas Finalizadas</h1>
+                <div class="table-responsive">
+                    <table class="table table-hover text-center">
+                        <thead>
+                            <tr>
+                                <th scope="col">Tarea</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Categoria</th>
+                                <th scope="col">Status</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for terminada in terminadas %}
+                                    <tr class="table-success">
+                                        <td>{{ terminada.titulo }}</td>
+                                        <td>{{ terminada.fecha }}</td>
+                                        <td>{{ terminada.categoria.nombre }}</td>
+                                        <td>{{ terminada.estado.estado }}</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm" disabled>Finalizar</button>
+                                        </td>
+                                    </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!------------------------------------------------------------------------------------------------------------------->
+            
+            <div class="col align-self-center">
+                <h1 class="text-center">Tareas Vencidas</h1>
+                <div class="table-responsive">
+                    <table class="table table-hover text-center">
+                        <thead>
+                            <tr>
+                                <th scope="col">Tarea</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Categoria</th>
+                                <th scope="col">Status</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for vencida in vencidas %}
+                                    <tr class="table-danger">
+                                        <td>{{ vencida.titulo }}</td>
+                                        <td>{{ vencida.fecha }}</td>
+                                        <td>{{ vencida.categoria.nombre }}</td>
+                                        <td>{{ vencida.estado.estado }}</td>
+                                        <td>
+                                            <form method="post" action="/terminado">
+                                                <button class="btn btn-primary btn-sm" >Finalizado</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            
         </div>
 
     </div>

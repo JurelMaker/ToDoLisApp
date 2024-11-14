@@ -4,6 +4,7 @@ from modelos.models import db,Tarea,Categorias
 from flask_migrate import Migrate
 import os
 from datetime import datetime
+from sqlalchemy import or_
 
 app = Flask(__name__)
 
@@ -19,6 +20,31 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 Migrate(app,db)
 
+#fecha actual
+hoy = datetime.now().date()
+
+@app.before_request
+def tarea_vencer():
+    tareas_porvencer = Tarea.query.filter(Tarea.fecha == hoy, Tarea.idestado == 2).all()
+    for tarea in tareas_porvencer:
+        tarea.idestado = 3
+        db.session.add(tarea)
+    
+    db.session.commit()
+
+@app.before_request
+def tarea_vencidas():
+    tareas_vendecias = Tarea.query.filter(hoy > Tarea.fecha, Tarea.idestado == 2).all()
+    for tarea in tareas_vendecias:
+        tarea.idestado = 4
+        db.session.add(tarea)
+    
+    db.session.commit()
+
+
+    
+
+
 #Vista principal
 @app.route('/',methods=['GET','POST'])
 def index():
@@ -32,25 +58,20 @@ def index():
         db.session.commit()
 
         return redirect(url_for('index'))
+
+    #Tarea sin hacer
+    tareas_pendientes = Tarea.query.filter(or_(Tarea.idestado == 2 ,Tarea.idestado == 3))
+
+    #Filtrado finalizadas
+    tareas_finalizadas = Tarea.query.filter(Tarea.idestado == 1)
+
+    #Filtrado vencidas
+    tareas_vencida = Tarea.query.filter(Tarea.idestado == 4)
     
-    #fecha actual
-    hoy = datetime.now().date()
-
-    #Recuperar datos
-    todas_tareas = Tarea.query.all()
-    #Logica de las tareas por vencer
-    for t in todas_tareas:
-        if hoy == t.fecha and t.idestado == 2:
-            t.idestado = 3
-            db.session.add(t)
-            db.session.commit()
-        elif hoy > t.fecha and t.idestado == 2: 
-            t.idestado = 4
-            db.session.add(t)
-            db.session.commit()
 
 
-    return render_template('index.html',formularioTarea=tarea,todas=todas_tareas)
+    return render_template('index.html',formularioTarea=tarea,
+                           pendientes=tareas_pendientes,terminadas=tareas_finalizadas,vencidas=tareas_vencida)
 
 #Tareas terminadas
 @app.route('/terminado',methods=['POST'])
@@ -58,9 +79,15 @@ def tarea_terminada():
    tarea_id = request.form.get('id')
    tarea = db.session.get(Tarea,tarea_id)
    tarea.idestado = 1
+   tarea.fecha = hoy
    db.session.commit()
 
    return redirect(url_for('index'))
+
+#ejecutar funcion 
+with app.app_context():
+    tarea_vencer()
+    tarea_vencidas()
 
 
 
