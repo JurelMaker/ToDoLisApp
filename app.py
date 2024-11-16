@@ -34,15 +34,12 @@ def tarea_vencer():
 
 @app.before_request
 def tarea_vencidas():
-    tareas_vendecias = Tarea.query.filter(hoy > Tarea.fecha, Tarea.idestado == 2).all()
+    tareas_vendecias = Tarea.query.filter(Tarea.fecha < hoy, Tarea.idestado == 2).all()
     for tarea in tareas_vendecias:
         tarea.idestado = 4
         db.session.add(tarea)
     
     db.session.commit()
-
-
-    
 
 
 #Vista principal
